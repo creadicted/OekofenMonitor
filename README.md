@@ -23,8 +23,8 @@ Upload the install.sh file to your pi and execute
 ## 2. Upload the Data Grabber
 
 Based on the original project [oekofen-spy](https://gitlab.com/p3605/oekofen-spy) part of this repository is
-the `oekofen-fetch.py` file,
-and a configuration file in which you need to set the ip, port and the user of your device in your local network.
+the `oekofen-fetch.py` file, and a configuration file in which you need to set the ip, port and the user of your device
+in your local network.
 
 Example `oekofen-fetch.cfg`:
 
@@ -42,6 +42,8 @@ password = smart
 dbname = oekofen
 ```
 
+A `oekofen-fetch.cfg` sample file is provided in this repository
+
 ## 3. Add a cronjob to execute the data fetcher
 
 The script takes the data from the json and inserts it in to the influx database. A cronjob is a task the device will
@@ -50,6 +52,7 @@ the terminal to ssh in to your device and execute:
 > sudo nano /etc/crontab
 
 You will see something like this
+
 ```
 # Example of job definition:
 # .---------------- minute (0 - 59)
@@ -64,20 +67,24 @@ You will see something like this
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
 ```
-Add the line 
+
+Add the line
+
 ```
 */1 *  * * * pi   /usr/bin/python3 /home/pi/oekofen-fetch.py
 ```
-It will call the script every minute.
 
+It will call the script every minute.
 
 ## 4. Login in to Graphana
 
 The default user is `admin` with the password `admin`. You need to change it after your first login.
 
 ### 4.1 Add Influx DB as a data source
+
 Configuration > Add data source > InfluxDB
 Add the values used in the setup:
+
 ```
 URL = http://localhost:8086
 Database = oekofen
