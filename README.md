@@ -74,7 +74,8 @@ Add the line
 */1 *  * * * pi   /usr/bin/python3 /home/pi/oekofen-fetch.py
 ```
 
-It will call the script every minute.
+It will call the script every minute. Make sure to shut down and start the device after you made changes. 
+After a soft restart, sometimes the system does not pick up the changes to the file. 
 
 ## 4. Login in to Graphana
 
