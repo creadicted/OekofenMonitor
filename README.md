@@ -17,8 +17,14 @@ To install everything needed a simple 'install.sh' script is provided following 
   The setup is compatible with the original project [oekofen-spy](https://gitlab.com/p3605/oekofen-spy) developed by
   Peter Fürle.
 
-Upload the install.sh file to your pi and execute
-> sudo ./install.sh
+Upload the `install.sh` file to your pi and execute:
+
+```
+chmod +x install.sh
+sudo ./install.sh
+``` 
+It can be that the device reboots during the installation. 
+Then just execute the `install.sh` script again. 
 
 ## 2. Upload the Data Grabber
 
@@ -77,7 +83,8 @@ Add the line
 It will call the script every minute. Make sure to shut down and start the device after you made changes. 
 After a soft restart, sometimes the system does not pick up the changes to the file. 
 
-## 4. Login in to Graphana
+## 4. Login in to Grafana
+Either on the device call http://localhost:3000/ or http://the-device-ip-in-your-network:3000/
 
 The default user is `admin` with the password `admin`. You need to change it after your first login.
 
@@ -93,6 +100,11 @@ User = pellematic
 password = smart
 HTTP Method =  GET
 ```
+
+### 4.2 Start Visualize
+
+
+
 
 # Additional Setup
 
@@ -116,13 +128,42 @@ HTTP Method =  GET
 5. Paste the code below into the nano text editor. On the very last line, change the URL to the website you want to
    automatically open on startup or after a reboot.
 
-> @lxpanel --profile LXDE-pi
-> @pcmanfm --desktop --profile LXDE-pi
-> #@xscreensaver -no-splash
-> point-rpi
-> @chromium-browser --start-fullscreen --start-maximized http://localhost:3000/
->
+```
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
+#@xscreensaver -no-splash
+point-rpi
+@chromium-browser --start-fullscreen --start-maximized http://localhost:3000/
+```
 
 6. Restart
 
 > sudo shutdown -r now
+
+
+### Remove login requrement:
+In the Grafana interface you can create an organization. 
+After that you can create some dashboards for this organization. 
+So, there is a problem that you need to specify the organization for anonymous users. 
+And it should be a real organization (for your Grafana). 
+And anonymous users will be able to see only dashboards from this organization.
+```
+cd /etc/grafana
+chmod a+rwx grafana.ini
+sudo nano graphana.ini
+```
+
+```
+#################################### Anonymous Auth ##########################
+[auth.anonymous]
+# enable anonymous access
+enabled = true
+
+# specify organization name that should be used for unauthenticated users
+org_name = ORGANIZATION
+```
+
+More details about that here: https://stackoverflow.com/questions/33111835/how-to-set-up-grafana-so-that-no-password-is-necessary-to-view-dashboards
+
+
+`sudo systemctl restart grafana-server`
