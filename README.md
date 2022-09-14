@@ -150,7 +150,7 @@ And anonymous users will be able to see only dashboards from this organization.
 ```
 cd /etc/grafana
 chmod a+rwx grafana.ini
-sudo nano graphana.ini
+sudo nano grafana.ini
 ```
 
 ```
